@@ -1,5 +1,5 @@
 const express = require("express");
-const route = express.Router(); 
+const router = express.Router(); 
 
 const { create }= require("../controller/category");
 const { requireSignin, isAuth, isAdmin } = require("../controller/auth");

@@ -1,7 +1,7 @@
 const mongoose = require ("mongoose");
 const { ObjectId } = mongoose.Schema
 
-const userSchema = new mongoose.Schema(
+const productSchema = new mongoose.Schema(
 {
    name: {
       type: String,
@@ -27,11 +27,13 @@ const userSchema = new mongoose.Schema(
       ref:'Category',
       required: true
    }, 
-
-   photo:{
-      data:buffer,
-      contentType:Spring
+   quantity:{
+         type: Number
    },
+photo: {
+   data: Buffer,
+   contentType: String
+},
    shipping:{
       required: false,
       type: Boolean
