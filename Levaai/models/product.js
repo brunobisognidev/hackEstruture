@@ -30,6 +30,11 @@ const productSchema = new mongoose.Schema(
    quantity:{
          type: Number
    },
+
+   sold:{
+         type: Number,
+         default:0
+   },
 photo: {
    data: Buffer,
    contentType: String
@@ -38,7 +43,6 @@ photo: {
       required: false,
       type: Boolean
    }
-
  
    },
    {timestamps: true}

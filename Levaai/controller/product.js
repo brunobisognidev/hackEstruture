@@ -44,7 +44,8 @@ exports.create = (req, res) => {
             // verifica os campos se foram preechidos 
 
             const 
-            {name, 
+            {
+             name, 
             description , 
             price , 
             category, 
@@ -53,7 +54,8 @@ exports.create = (req, res) => {
          } = fields
 
             if
-            (!name||
+            (
+               !name||
              !description ||
              !price ||
              !category || 
@@ -70,13 +72,93 @@ exports.create = (req, res) => {
          product.photo.contentType =files.photo.type
       }
 
-      product.save((err, result) => {
+      products.save((err, result) => {
          if(err) {
-            return res.status(400).json({
-               error: errorHandler(error)
-            });
+            console.log (err, result)
+            return res.status(400).json (err.message )
             res.json(result);
          }
-      })
+      });
+   });
+};
+
+exports.remove = (req, res) => {
+   let product = req.product 
+   product.remove((err, deletedProduct) => {
+      if(err) {
+         return res.status(400).json({
+            error: errorHandler(err)
+         });
+      }
+      res.json({
+         deletedProduct,
+         message: "Product deleted succesfully"
+      }); 
    })
+}
+
+exports.update =(req, res) => {
+   let form = new formidable.IncomingForm()
+      form.keepExtensions = true;
+      form.parse(req, (err, field, file) => {
+         if(err) {
+            return res.status(400).json({
+               erro:"Image could not be uploaded"
+            }); 
+         }
+            const {
+
+               name,
+               description,
+               price,
+               category,
+               quantity,
+               shipping,
+            } = fields;
+
+            if (
+
+               !name ||
+               !description||
+               !price ||
+               !category || 
+               !quantity || 
+               !shipping
+
+            ) {
+
+                  return res.status(400).json({
+                     erro:"All fields are required"
+                  });
+            };
+
+            let product = req.product
+            product = _.extend(product, fields)
+
+            // 1kb = 1000 
+            // 1mb = 1000000
+
+            if (file.photo){
+               if (files.photo.size > 1000000){
+                  return res.status(400).json({
+                     error : "Image should be less than 1mb in size"
+                  });
+               }
+               product.photo.data = fs.readFileSync(file.photo.path);
+               product.photo.contentType = files.photo.type
+            }
+            product.save((err, result) => {
+               if (err) {
+                  return res.status(400).json({
+                     erro: errorHandler(err)
+                  });
+               }
+               res.json(result);
+            })
+
+      });
+
+   
+
+   
 }
