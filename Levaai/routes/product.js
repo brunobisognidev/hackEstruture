@@ -6,7 +6,13 @@ const {
    productById, 
    read, 
    remove, 
-   update 
+   update,
+   list, 
+   listRelated,
+   listCategories,
+   listBySearch, 
+   photo
+   
 }= require("../controller/product");
 const { requireSignin, isAuth, isAdmin } = require("../controller/auth");
 const { userById } = require("../controller/user");
@@ -33,10 +39,18 @@ requireSignin,
  requireSignin,
  isAuth,
  isAdmin,
- update
+ update,
+ 
  );
 
- 
+router.get("/products", list);
+router.get('/products/related/:productId', listRelated);
+router.get("/products/categories", listCategories);
+router.post("product/by/search", listBySearch );
+router.get("/product/photo/:productId", photo);
+
+
+
 
 router.param("userId", userById);
 router.param("productId" , productById);
